@@ -1,0 +1,4 @@
+stack_dle_api_stubs.c:12:12:hci_le_set_data_length	24	static
+stack_dle_api_stubs.c:17:12:hci_le_read_suggested_default_data_length	16	static
+stack_dle_api_stubs.c:22:12:hci_le_write_suggested_default_data_length	16	static
+stack_dle_api_stubs.c:27:12:hci_le_read_maximum_data_length	24	static

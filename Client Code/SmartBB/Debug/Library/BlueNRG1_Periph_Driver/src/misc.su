@@ -1,0 +1,4 @@
+core_cm0.h:567:22:NVIC_SetPriority	24	static
+misc.c:87:6:NVIC_Init	16	static
+misc.c:116:6:SystemSleepCmd	16	static
+misc.c:131:6:SysTick_State	16	static

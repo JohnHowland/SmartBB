@@ -1,0 +1,4 @@
+stack_sc_api_stubs.c:12:12:aci_gap_passkey_input	16	static
+stack_sc_api_stubs.c:17:12:aci_gap_numeric_comparison_value_confirm_yesno	16	static
+stack_sc_api_stubs.c:22:12:hci_le_read_local_p256_public_key	8	static
+stack_sc_api_stubs.c:27:12:hci_le_generate_dhkey	16	static

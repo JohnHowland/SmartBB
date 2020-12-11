@@ -1,0 +1,10 @@
+stack_priv_api_stubs.c:12:12:aci_gap_add_devices_to_resolving_list	16	static
+stack_priv_api_stubs.c:17:12:hci_le_remove_device_from_resolving_list	16	static
+stack_priv_api_stubs.c:22:12:hci_le_add_device_to_resolving_list	24	static
+stack_priv_api_stubs.c:27:12:hci_le_set_resolvable_private_address_timeout	16	static
+stack_priv_api_stubs.c:32:12:hci_le_set_address_resolution_enable	16	static
+stack_priv_api_stubs.c:37:12:hci_le_read_peer_resolvable_address	24	static
+stack_priv_api_stubs.c:42:12:hci_le_read_local_resolvable_address	24	static
+stack_priv_api_stubs.c:47:12:hci_le_read_resolving_list_size	16	static
+stack_priv_api_stubs.c:52:9:hci_le_clear_resolving_list	8	static
+stack_priv_api_stubs.c:57:12:hci_le_set_privacy_mode	16	static
