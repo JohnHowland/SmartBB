@@ -1,0 +1,26 @@
+/*
+ * Motor.h
+ *
+ *  Created on: Dec 25, 2020
+ *      Author: fordm
+ */
+
+#ifndef MOTOR_H_
+#define MOTOR_H_
+
+#include "BlueNRG1_gpio.h"
+
+#define MOTOR_PIN_A			GPIO_Pin_2
+#define MOTOR_PIN_A_BAR		GPIO_Pin_3
+#define MOTOR_PIN_B			GPIO_Pin_4
+#define MOTOR_PIN_B_BAR		GPIO_Pin_5
+
+void moveForwardHalfStep(int iteration);
+
+void rotateForwardHalfStep(int delay);
+
+void rotateBackwardHalfStep(int delay);
+
+
+
+#endif /* MOTOR_H_ */

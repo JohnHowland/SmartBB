@@ -1,0 +1,103 @@
+/*
+ * Motor.c
+ *
+ *  Created on: Dec 25, 2020
+ *      Author: fordm
+ */
+#include "Motor.h"
+
+void moveForwardHalfStep(int iteration)
+{
+	if(iteration == 0)
+	{
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5, Bit_RESET);
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_2 , Bit_SET);
+	}
+	if(iteration == 1)
+	{
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5, Bit_RESET);
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_2 | GPIO_Pin_3, Bit_SET);
+	}
+	if(iteration == 2)
+	{
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5, Bit_RESET);
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_3 , Bit_SET);
+	}
+	if(iteration == 3)
+	{
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5, Bit_RESET);
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_3 | GPIO_Pin_4, Bit_SET);
+	}
+	if(iteration == 4)
+	{
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5, Bit_RESET);
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_4 , Bit_SET);
+	}
+	if(iteration == 5)
+	{
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5, Bit_RESET);
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_4 | GPIO_Pin_5, Bit_SET);
+	}
+	if(iteration == 6)
+	{
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5, Bit_RESET);
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_5 , Bit_SET);
+	}
+	if(iteration == 7)
+	{
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5, Bit_RESET);
+		GPIO_WriteBitsLowPowerModes(GPIO_Pin_2 | GPIO_Pin_5, Bit_SET);
+	}
+}
+
+void rotateForwardHalfStep(int delay)
+{
+	int i;
+	int j;
+
+	for(i=0; i <250; i++)
+	{
+		moveForwardHalfStep(0);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(1);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(2);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(3);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(4);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(5);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(6);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(7);
+		for(j=0; j<delay; j++);
+	}
+}
+
+void rotateBackwardHalfStep(int delay)
+{
+	int i;
+	int j;
+
+	for(i=0; i <250; i++)
+	{
+		moveForwardHalfStep(7);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(6);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(5);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(4);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(3);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(2);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(1);
+		for(j=0; j<delay; j++);
+		moveForwardHalfStep(0);
+		for(j=0; j<delay; j++);
+	}
+}

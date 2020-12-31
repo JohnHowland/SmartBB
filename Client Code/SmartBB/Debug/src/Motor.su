@@ -1,0 +1,3 @@
+Motor.c:9:6:moveForwardHalfStep	16	static
+Motor.c:53:6:rotateForwardHalfStep	24	static
+Motor.c:79:6:rotateBackwardHalfStep	24	static

@@ -1,1 +1,12 @@
-main.c:55:5:main	16	static
+core_cm0.h:567:22:NVIC_SetPriority	24	static
+core_cm0.h:603:22:NVIC_SystemReset	8	static
+core_cm0.h:641:26:SysTick_Config	16	static
+main.c:60:5:main	8	static
+main.c:84:6:help	8	static
+main.c:105:6:Set_DeviceConnectable	72	static
+main.c:128:6:initGPIOPins	8	static
+main.c:143:6:initHardware	8	static
+main.c:160:6:initSoftware	16	static
+main.c:192:6:hci_hardware_error_event	16	static
+main.c:206:6:aci_hal_fw_error_event	24	static
+main.c:229:6:HAL_VTimerTimeoutCallback	16	static

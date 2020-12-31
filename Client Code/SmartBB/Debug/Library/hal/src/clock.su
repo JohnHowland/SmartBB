@@ -1,0 +1,6 @@
+core_cm0.h:567:22:NVIC_SetPriority	24	static
+core_cm0.h:641:26:SysTick_Config	16	static
+clock.c:51:6:SysCount_Handler	8	static
+clock.c:58:6:Clock_Init	8	static
+clock.c:66:12:Clock_Time	8	static
+clock.c:76:6:Clock_Wait	24	static

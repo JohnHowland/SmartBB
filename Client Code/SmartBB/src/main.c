@@ -1,0 +1,269 @@
+
+/******************** (C) COPYRIGHT 2018 STMicroelectronics ********************
+ * File Name          : Power_Consumption_Test.c
+ * Author             : RF Application Team
+ * Version            : 1.0.0
+ * Date               : 12-April-2017
+ * Description        : Code demostrating the BlueNRG-1 current consumption in BLE normal operating mode
+ ********************************************************************************
+ * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+ * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+ * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+ * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+ * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+ * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+ *******************************************************************************/
+
+
+/* Includes ------------------------------------------------------------------*/
+#include <main.h>
+#include <stdio.h>
+#include <string.h>
+#include "BlueNRG1_it.h"
+#include "BlueNRG1_conf.h"
+#include "sleep.h"
+#include "bluenrg1_stack.h"
+#include "ble_status.h"
+#include "ble_const.h"
+#include "SDK_EVAL_Config.h"
+#include "BlueNRG1_gpio.h"
+#include "Motor.h"
+
+
+uint8_t device_state;
+uint16_t connection_interval;
+GPIO_InitType GPIO_InitStructure;
+
+BlueNRG_Stack_Initialization_t BlueNRG_Stack_Init_params = {
+		(uint8_t*)stacklib_flash_data,
+		FLASH_SEC_DB_SIZE,
+		FLASH_SERVER_DB_SIZE,
+		(uint8_t*)stacklib_stored_device_id_data,
+		(uint8_t*)dyn_alloc_a,
+		TOTAL_BUFFER_SIZE(NUM_LINKS,NUM_GATT_ATTRIBUTES,NUM_GATT_SERVICES,ATT_VALUE_ARRAY_SIZE,MBLOCKS_COUNT,CONTROLLER_DATA_LENGTH_EXTENSION_ENABLED),
+		NUM_GATT_ATTRIBUTES,
+		NUM_GATT_SERVICES,
+		ATT_VALUE_ARRAY_SIZE,
+		NUM_LINKS,
+		0, /* reserved for future use */
+		PREPARE_WRITE_LIST_SIZE,
+		MBLOCKS_COUNT,
+		MAX_ATT_MTU,
+		CONFIG_TABLE,
+};
+
+NO_INIT_SECTION(uint32_t stacklib_flash_data[TOTAL_FLASH_BUFFER_SIZE(FLASH_SEC_DB_SIZE, FLASH_SERVER_DB_SIZE)>>2], ".noinit.stacklib_flash_data");
+NO_INIT_SECTION(uint8_t stacklib_stored_device_id_data[56], ".noinit.stacklib_stored_device_id_data");
+NO_INIT(uint32_t dyn_alloc_a[TOTAL_BUFFER_SIZE(NUM_LINKS,NUM_GATT_ATTRIBUTES,NUM_GATT_SERVICES,ATT_VALUE_ARRAY_SIZE,MBLOCKS_COUNT,CONTROLLER_DATA_LENGTH_EXTENSION_ENABLED)>>2]);
+
+
+int main(void)
+{
+	int ret;
+	/* System Init */
+	initHardware();
+	initSoftware();
+
+	printf("Enter ? for list of commands\r\n");
+
+	while(1)
+	{
+		BTLE_StackTick();
+		APP_Tick();
+	}
+}
+
+
+
+/*******************************************************************************
+ * Function Name  : help.
+ * Description    : Prints the test option.
+ * Input          : None.
+ * Return         : None.
+ *******************************************************************************/
+void help(void)
+{
+	printf("\r\n");
+	printf("l:   Lock the motor. \r\n");
+	printf("u:   Unlock the motor. \r\n");
+	printf("f:   Device in Discoverable mode with fast interval 100 ms \r\n");
+	printf("s:   Device in discoverable mode with slow interval 1000 ms \r\n");
+	printf("r:   Reset the BlueNRG-1\r\n");
+	printf("?:   Display this help menu\r\n");
+	printf("\r\n> ");
+}
+
+
+
+/*******************************************************************************
+ * Function Name  : Set_DeviceConnectable.
+ * Description    : Puts the device in connectable mode.
+ * Input          : None.
+ * Output         : None.
+ * Return         : None.
+ *******************************************************************************/
+void Set_DeviceConnectable(uint16_t adv_interval)
+{  
+	uint8_t ret;
+	uint8_t local_name[] = {AD_TYPE_COMPLETE_LOCAL_NAME, 'S', 'm', 'a', 'r', 't', 'B', 'B', ' ', 'L', 'o', 'c', 'k'};
+
+	if (adv_interval == ADV_INTERVAL_SLOW_MS)
+		printf("Set Discoverable Mode Slow Interval 1000 ms");
+	else
+		printf("Set Discoverable Mode Fast Interval 100 ms");
+
+	hci_le_set_scan_response_data(0,NULL);
+
+	ret = aci_gap_set_discoverable(ADV_IND,
+			(adv_interval*1000)/625,(adv_interval*1000)/625,
+			PUBLIC_ADDR, NO_WHITE_LIST_USE,
+			sizeof(local_name), local_name, 0, NULL, 0, 0);
+	if(ret != BLE_STATUS_SUCCESS) {
+		printf("--> FAILED: 0x%02x\r\n",ret);
+	} else {
+		device_state = DEVICE_ADV_STATE;
+		printf("--> SUCCESS\r\n");
+	}
+}
+void initGPIOPins()
+{
+	SysCtrl_PeripheralClockCmd(CLOCK_PERIPH_GPIO, ENABLE);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Output;
+	GPIO_InitStructure.GPIO_Pull = DISABLE;
+	GPIO_InitStructure.GPIO_HighPwr = ENABLE;
+
+	/* GPIO9, GPIO10, GPIO11 initialization during low power modes for BlueNRG-2. */
+	GPIO_Init(&GPIO_InitStructure);
+	/* Set the output state of the GIO9, GIO10, GIO11 during low power modes. BlueNRG-2 only */
+	GPIO_WriteBit(GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5, Bit_RESET);
+}
+
+void initHardware()
+{
+	 SystemInit();
+
+		  /* Identify BlueNRG1 platform */
+		  SdkEvalIdentification();
+
+		  /* Enable the UART */
+		  SdkEvalComIOConfig(SdkEvalComIOProcessInputData);
+
+		  /* Disable the PKA peripheral clock to reduce the power consumption */
+		  SysCtrl_PeripheralClockCmd(CLOCK_PERIPH_PKA, DISABLE);
+
+		  initGPIOPins();
+}
+
+
+void initSoftware()
+{
+	int ret;
+
+	/* BlueNRG-1 stack init */
+	ret = BlueNRG_Stack_Initialization(&BlueNRG_Stack_Init_params);
+	if (ret != BLE_STATUS_SUCCESS) {
+		printf("Error during BlueNRG_Stack_Initialization() 0x%02x\r\n", ret);
+		while(1);
+	}
+
+	/* Init Chat Device */
+	ret = CHAT_DeviceInit();
+	if (ret != BLE_STATUS_SUCCESS) {
+		printf("CHAT_DeviceInit()--> Failed 0x%02x\r\n", ret);
+		while(1);
+	}
+
+	device_state = DEVICE_IDLE_STATE;
+
+	/* Configure SysTick to generate interrupt */
+	SysTick_Config(SYST_CLOCK/1000 - 1);
+}
+
+/* Hardware Error event. 
+   This event is used to notify the Host that a hardware failure has occurred in the Controller. 
+   Hardware_Code Values:
+   - 0x01: Radio state error
+   - 0x02: Timer overrun error
+   - 0x03: Internal queue overflow error
+   After this event is recommended to force device reset. */
+
+void hci_hardware_error_event(uint8_t Hardware_Code)
+{
+	NVIC_SystemReset();
+}
+
+/**
+ * This event is generated to report firmware error informations.
+ * FW_Error_Type possible values:
+ * Values:
+  - 0x01: L2CAP recombination failure
+  - 0x02: GATT unexpected response
+  - 0x03: GATT unexpected request
+    After this event with error type (0x01, 0x02, 0x3) it is recommended to disconnect. 
+ */
+void aci_hal_fw_error_event(uint8_t FW_Error_Type,
+		uint8_t Data_Length,
+		uint8_t Data[])
+{
+	if (FW_Error_Type <= 0x03)
+	{
+		uint16_t connHandle;
+
+		/* Data field is the connection handle where error has occurred */
+		connHandle = LE_TO_HOST_16(Data);
+
+		aci_gap_terminate(connHandle, BLE_ERROR_TERMINATED_REMOTE_USER);
+	}
+}
+
+/*******************************************************************************
+ * Function Name  : HAL_VTimerTimeoutCallback.
+ * Description    : This function will be called on the expiry of 
+ *                  a one-shot virtual timer.
+ * Input          : See file bluenrg1_stack.h
+ * Output         : See file bluenrg1_stack.h
+ * Return         : See file bluenrg1_stack.h
+ *******************************************************************************/
+void HAL_VTimerTimeoutCallback(uint8_t timerNum)
+{
+	/* Add app code to execute @ Sleep timeout */
+}
+
+#ifdef  USE_FULL_ASSERT
+
+/**
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ */
+void assert_failed(uint8_t* file, uint32_t line)
+{ 
+	/* User can add his own implementation to report the file name and line number,
+  ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+
+	/* Infinite loop */
+	while (1)
+	{
+	}
+}
+
+#endif
+
+/**
+ * @}
+ */
+
+/**
+ * @}
+ */
+
+/**
+ * @}
+ */
+
+/******************* (C) COPYRIGHT 2015 STMicroelectronics *****END OF FILE****/
+
+
