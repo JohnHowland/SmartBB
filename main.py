@@ -4,7 +4,7 @@ import pygatt
 # Bluetooth stuff
 MAC = "02:80:E1:00:00:AA"
 
-adapter = pygatt.BGAPIBackend()
+adapter = pygatt.GATTToolBackend()
 
 try:
     print("in Try")
