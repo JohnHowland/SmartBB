@@ -10,7 +10,7 @@ adapter = pygatt.GATTToolBackend()
 try:
     print("in Try")
     adapter.start()
-    device = adapter.connect(MAC)
+    device = adapter.connect(MAC, 10)
     device.char_write_handle(0x0011, bytearray([0x55]))
     print("Write ABCD to 0x0011")
     time.sleep(2.0)
