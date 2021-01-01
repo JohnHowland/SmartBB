@@ -17,7 +17,7 @@ try:
     print("Reading characteristics")
     print(device.discover_characteristics())
     time.sleep(2.0)
-    value = device.char_read_handle(0x000e)
+    value = device.char_read('d973f2e1-b19e-11e2-9e96-0800200c9a66')
     print("Value = " + str(value))
     time.sleep(2.0)
 finally:
