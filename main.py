@@ -11,7 +11,10 @@ while True:
     try:
         print("in Try")
         adapter.start()
-        device = adapter.connect(MAC, 10)
+        try:
+            device = adapter.connect(MAC, 10)
+        except:
+            continue
         device.char_write_handle(0x0011, bytearray([0x55]))
         print("Write ABCD to 0x0011")
         time.sleep(2.0)
