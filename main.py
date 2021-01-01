@@ -14,7 +14,7 @@ try:
     device.char_write_handle(0x0011, bytearray([0x55]))
     print("Write ABCD to 0x0011")
     time.sleep(2.0)
-    print("Reading characteristis)
+    print("Reading characteristics")
     print(device.discover_characteristics)
     time.sleep(2.0)
     value = device.char_read_handle(0x000e)
