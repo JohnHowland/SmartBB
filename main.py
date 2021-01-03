@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # Bluetooth stuff
     MAC = "02:80:E1:00:00:AA"
 
-    ble_device = bt_connection(MAC, 10)
+    ble_device = bt_connection.ble_peripheral(MAC, 10)
    
     while True:
         try:
