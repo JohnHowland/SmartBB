@@ -4,7 +4,7 @@ import logging
 #import support.lock_control as lock_control
 import support.bluetooth_connection as bt_connection
 
-if __name__ == '__main':
+if __name__ == '__main__':
     #LOG_LEVEL = logging.INFO
     LOG_LEVEL = logging.DEBUG
     LOG_FILE = "/home/pi/logs/smartBB.log"
