@@ -3,12 +3,11 @@ import time
 import logging
 
 class ble_peripheral():
-    def __init__(self, MAC = "", timeout = 10):
+    def __init__(self, MAC, timeout):
         logging.debug("MAC: " + MAC + "timeout: " + str(timeout))
         self.MAC = MAC
         self.timeout = timeout
         self.adapter = pygatt.GATTToolBackend()
-        pass
 
     def initiate_connection(self):
         logging.debug("initiating BLE connction")
@@ -32,5 +31,5 @@ class ble_peripheral():
         logging.debug(self.device.discover_characteristics())
 
     def read_characteristic(self, uuid):
-        return device.char_read(uuid)
+        return self.device.char_read(uuid)
 
