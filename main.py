@@ -7,8 +7,8 @@ import support.bluetooth_connection as bt_connection
 if __name__ == '__main':
     #LOG_LEVEL = logging.INFO
     LOG_LEVEL = logging.DEBUG
-    #LOG_FILE = "/home/pi/logs/smartBB.log"
-    LOG_FILE = "/dev/stdout"
+    LOG_FILE = "/home/pi/logs/smartBB.log"
+    #LOG_FILE = "/dev/stdout"
     LOG_FORMAT = "%(asctime)s %(levelname)s %(message)s"
     logging.basicConfig(filename=LOG_FILE, format=LOG_FORMAT, level=LOG_LEVEL)
     logging.info("Setting up logging")
