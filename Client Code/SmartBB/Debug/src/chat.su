@@ -5,9 +5,9 @@ chat.c:153:6:Send_Data_Over_BLE	8	static
 chat.c:193:6:Process_InputData	24	static
 chat.c:226:5:updateTxCharacteristic	40	static
 chat.c:249:6:APP_Tick	8	static
-chat.c:420:6:hci_le_connection_complete_event	24	static
-chat.c:447:6:hci_disconnection_complete_event	24	static
-chat.c:477:6:aci_gatt_attribute_modified_event	24	static
-chat.c:570:6:aci_gatt_tx_pool_available_event	16	static
-chat.c:585:6:aci_gatt_read_permit_req_event	24	static
-chat.c:595:6:aci_hal_end_of_radio_activity_event	16	static
+chat.c:421:6:hci_le_connection_complete_event	24	static
+chat.c:448:6:hci_disconnection_complete_event	24	static
+chat.c:478:6:aci_gatt_attribute_modified_event	24	static
+chat.c:571:6:aci_gatt_tx_pool_available_event	16	static
+chat.c:586:6:aci_gatt_read_permit_req_event	24	static
+chat.c:596:6:aci_hal_end_of_radio_activity_event	16	static

@@ -289,6 +289,7 @@ void APP_Tick(void)
 		SdkEvalComUartInit(UART_BAUDRATE);
 		printf ("Device Disconnected!!!\r\n");
 		device_state = DEVICE_IDLE_STATE;
+		APP_FLAG_SET(SET_CONNECTABLE);
 		break;
 	case DEVICE_CONN_STATE:
 		/* Enable the UART */
